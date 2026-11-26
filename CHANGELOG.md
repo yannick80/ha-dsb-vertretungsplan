@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.2.3
 
 - Repository: README in the same layout as the other projects (badges, Marketplace/HACS buttons, troubleshooting), issue templates, Dependabot for GitHub Actions. CI renamed to *Validate*; the tests run again (missing frontend package in the test requirements).
 - Manifest: documentation and issue tracker point to this repository, code owner set.
