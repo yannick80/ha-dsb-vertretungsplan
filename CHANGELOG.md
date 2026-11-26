@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Integration icon: Home Assistant shows it under Devices & services instead of a placeholder.
+
 ## 1.2.3
 
 - Repository: README in the same layout as the other projects (badges, Marketplace/HACS buttons, troubleshooting), issue templates, Dependabot for GitHub Actions. CI renamed to *Validate*; the tests run again (missing frontend package in the test requirements).
