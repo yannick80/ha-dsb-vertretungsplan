@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- README: the disclaimer says that the integration uses the undocumented API of the DSBmobile app.
 - Integration icon: Home Assistant shows it under Devices & services instead of a placeholder.
 
 ## 1.2.3

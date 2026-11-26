@@ -237,6 +237,8 @@ See [CHANGELOG.md](CHANGELOG.md) for what changed.
 
 This project is independent and not affiliated with, endorsed by, or supported by DSB / heinekingmedia GmbH or Untis GmbH. The names are used only to say which service the integration works with.
 
+The integration uses the undocumented API of the DSBmobile app with your own DSBmobile account. It is not an official interface: DSB can change or block it at any time, and the integration may then stop working. Keep the polling interval reasonable (the minimum is 5 minutes).
+
 ## License
 
 [MIT](LICENSE)
