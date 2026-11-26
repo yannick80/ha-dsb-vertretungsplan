@@ -20,8 +20,6 @@ jobs:
       - uses: hacs/action@main
         with:
           category: integration
-          # no brand icons yet (neither in home-assistant/brands nor in the repo)
-          ignore: brands
 
   hassfest:
     name: Hassfest
