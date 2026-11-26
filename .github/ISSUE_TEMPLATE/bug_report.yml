@@ -1,0 +1,45 @@
+name: Bug report
+description: Wrong or missing entries, setup fails, or the card shows an error.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please do not post your DSBmobile user ID or password. Remove names of teachers and pupils from screenshots and files.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happens, and what did you expect?
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: DSB Vertretungsplan version
+      description: Shown under Settings > Devices & services > DSB Vertretungsplan.
+    validations:
+      required: true
+  - type: input
+    id: ha_version
+    attributes:
+      label: Home Assistant version
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser or app (for card problems)
+      placeholder: e.g. Chrome 131, HA Companion app on iOS, Shelly Wall Display
+  - type: textarea
+    id: yaml
+    attributes:
+      label: Card YAML (for card problems)
+      render: yaml
+  - type: textarea
+    id: logs
+    attributes:
+      label: Debug log or diagnostics
+      description: >
+        See "Debug logs and diagnostics" in the README. For parser problems, the plan file
+        written by scripts/dsb_check.py helps most.
+      render: text

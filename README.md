@@ -1,22 +1,98 @@
-# DSB Vertretungsplan for Home Assistant
+<p align="center">
+  <a href="https://my.home-assistant.io/redirect/marketplace_repository/?owner=yannick80&repository=ha-dsb-vertretungsplan&category=integration">
+    <img alt="Open in the Home Assistant Marketplace" src="https://my.home-assistant.io/badges/marketplace_repository.svg"/>
+  </a>
+</p>
+<p align="center">
+  <a href="https://github.com/yannick80/ha-dsb-vertretungsplan/releases/latest">
+    <img alt="Latest release" src="https://img.shields.io/github/v/release/yannick80/ha-dsb-vertretungsplan?label=release"/>
+  </a>
+  <a href="https://www.home-assistant.io">
+    <img alt="HA 2025.1+" src="https://img.shields.io/badge/HA-2025.1%2B-blue.svg"/>
+  </a>
+  <a href="https://github.com/yannick80/ha-dsb-vertretungsplan/actions/workflows/validate.yml">
+    <img alt="Validate" src="https://img.shields.io/github/actions/workflow/status/yannick80/ha-dsb-vertretungsplan/validate.yml?branch=main&label=validate"/>
+  </a>
+  <a href="LICENSE">
+    <img alt="License" src="https://img.shields.io/github/license/yannick80/ha-dsb-vertretungsplan.svg"/>
+  </a>
+</p>
 
-Custom integration that brings the Untis substitution plan ("Vertretungsplan") published through **DSBmobile** into Home Assistant. The plan is loaded **once per school account**; filtering by class happens on the dashboard or in automations. One account and one sensor are enough for several children at the same school.
+# DSB Vertretungsplan
 
-- **Mobile API, no web scraping.** Uses the same token based API as the DSBmobile app (`mobileapi.dsbcontrol.de`). No ASP.NET login form, no flapping between real data and "no substitutions".
-- **DataUpdateCoordinator with proper error handling.** Connection problems are reported as `UpdateFailed`, the last good data is kept and entities become `unavailable` instead of silently dropping to 0. An empty plan (holidays) is a valid state.
-- **Re-auth, reconfigure, options without restart, diagnostics export, translations (de/en).**
-- **Bundled dashboard card** with a visual editor, served by the integration itself.
-- **Robust Untis parser.** Columns are detected by their header, `<s>old</s> new` and `old?new` are recognised as changes, merged classes such as `08abc` are expanded to `08a, 08b, 08c`, several days per file are supported.
+DSB Vertretungsplan brings your school's substitution plan ("Vertretungsplan") from **DSBmobile** into Home Assistant.
+The plan is loaded **once per school account**; filtering by class happens on the dashboard or in automations, so one account is enough for several children at the same school.
 
+![The dashboard card](examples/card.png)
+
+<!-- ha-marketplace:exclude-start -->
+**Contents:**
+[What you get](#what-you-get) ·
+[Before you start](#before-you-start) ·
+[Installation](#installation) ·
+[Set up](#set-up) ·
+[Entities](#entities) ·
+[Dashboard card](#dashboard-card) ·
+[Action `get_entries`](#action-dsb_vertretungsplanget_entries) ·
+[Troubleshooting & FAQ](#troubleshooting--faq) ·
+[For developers](#for-developers)
+<!-- ha-marketplace:exclude-end -->
+
+## What you get
+
+- **One card per child.** A dashboard card with a visual editor shows the substitutions for one class. It ships with the integration; no second repository and no manual resource entry.
+- **Notifications per class.** The action `dsb_vertretungsplan.get_entries` returns the entries of the coming days for one class, ready for a morning notification.
+- **Calendar.** The next substitution as a calendar event, for the calendar card and calendar triggers.
+- **Reliable data.** Uses the same API as the DSBmobile app, no web scraping. When DSB is unreachable, the last good plan is kept and the entities become *unavailable* instead of dropping to 0. An empty plan during the holidays is a valid state.
+- **Understands Untis plans.** Columns are detected by their header, changed values (`<s>old</s> new`, `old?new`) are recognised, merged classes such as `08abc` are expanded to `08a, 08b, 08c`, and several days per file work.
+- **Easy upkeep.** Re-authentication, reconfiguration, options without restart, diagnostics download, English and German user interface.
+
+## Before you start
+
+- [ ] **Home Assistant 2025.1 or newer.**
+- [ ] **Your school publishes its Untis substitution plan through DSBmobile**, and you can see it in the DSBmobile app.
+- [ ] **The user ID and password** you use in the DSBmobile app.
+
+<!-- ha-marketplace:exclude-start -->
 ## Installation
 
-**HACS:** three dots → Custom repositories → URL of this repository, category *Integration* → install → restart Home Assistant.
+### Home Assistant 2026.11 and newer (Marketplace)
 
-**Manual:** copy the folder `custom_components/dsb_vertretungsplan` to `<config>/custom_components/` and restart.
+**One click:** select this button, then confirm in your Home Assistant.
 
-## Setup
+[![Open Marketplace repository on My Home Assistant](https://my.home-assistant.io/badges/marketplace_repository.svg)](https://my.home-assistant.io/redirect/marketplace_repository/?owner=yannick80&repository=ha-dsb-vertretungsplan&category=integration)
 
-**Settings → Devices & services → Add integration → "DSB Vertretungsplan"**, enter the user ID and password as used in the DSBmobile app. Under **Configure** you can change later:
+**Or by hand:**
+
+1. In Home Assistant, go to **Settings** > **Marketplace**.
+2. In the upper-right corner, select **Add from link**.
+3. Under **GitHub link**, enter `https://github.com/yannick80/ha-dsb-vertretungsplan`. If Home Assistant asks for the type, choose **Integration**.
+4. Open DSB Vertretungsplan and select **Install**.
+5. Restart Home Assistant.
+
+### Home Assistant 2026.10 and older (HACS)
+
+[![Open in HACS on My Home Assistant](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=yannick80&repository=ha-dsb-vertretungsplan&category=integration)
+
+1. Open **HACS** in the sidebar.
+2. Select the three dots in the upper-right corner, then **Custom repositories**.
+3. Enter `https://github.com/yannick80/ha-dsb-vertretungsplan`, choose the type **Integration**, and select **Add**.
+4. Open DSB Vertretungsplan and select **Download**.
+5. Restart Home Assistant.
+
+### Manual installation
+
+1. Download the source code of the [latest release](https://github.com/yannick80/ha-dsb-vertretungsplan/releases/latest).
+2. Copy the folder `custom_components/dsb_vertretungsplan` to `config/custom_components/` (create the folder if it does not exist).
+3. Restart Home Assistant.
+<!-- ha-marketplace:exclude-end -->
+
+## Set up
+
+1. Go to **Settings** > **Devices & services** > **Add integration** and search for **DSB Vertretungsplan**.
+2. Enter the user ID and password as used in the DSBmobile app.
+
+Under **Configure** you can change later:
 
 | Option           | Default | Meaning                                                     |
 |------------------|---------|-------------------------------------------------------------|
@@ -55,11 +131,15 @@ changes: { subject: "De", room: "A101" }   # previous values of changed fields
 columns: { "Art": "Vertretung", "(Fach)": "De → En", ... }   # every column, raw
 ```
 
-## Dashboard card per child
+## Dashboard card
 
-The integration ships its own Lovelace card and registers it automatically as a dashboard resource (visible under Settings → Dashboards → Resources, do not remove it); no manual resource entry and no second HACS repository are needed. If your resources are managed in YAML (`lovelace: resource_mode: yaml`), the card is loaded as an extra script instead. On the dashboard choose **Add card → "DSB Vertretungsplan"**; the visual editor asks for the sensor, the class, a title and a few display options. For a second child add the card again with another class; both read the same sensor.
+The integration ships its own dashboard card and registers it automatically as a dashboard resource (visible under **Settings** > **Dashboards** > **Resources**; do not remove it). If your resources are managed in YAML (`lovelace: resource_mode: yaml`), the card is loaded as an extra script instead.
 
-![Card](examples/card.png)
+1. Open a dashboard, select the pencil, then **Add card**.
+2. Search for **DSB Vertretungsplan**.
+3. Pick the sensor and the class. For a second child, add the card again with another class; both read the same sensor.
+
+In YAML:
 
 ```yaml
 type: custom:dsb-vertretungsplan-card
@@ -80,8 +160,6 @@ class: "08b"
 | `show_footer`      | `true`               | show the plan timestamp at the bottom                                     |
 | `compact`          | `false`              | lesson, type and subject only                                             |
 | `merge_lessons`    | `true`               | show consecutive lessons with identical content as one row (`5-6. Std`)   |
-
-After an update of the integration the browser reloads the card through the version query parameter; should it still look old, hard-reload the page once. If the card finds nothing for the configured class although the plan has entries, it lists the classes present in the plan so the school's spelling can be checked quickly.
 
 ## Action `dsb_vertretungsplan.get_entries`
 
@@ -112,7 +190,17 @@ actions:
 
 Response: `class_name`, `from`, `to`, `count`, `classes`, `plan_updated`, `entries` (flat) and `days` (grouped by day, each with `entries`). `days_ahead` overrides the window per call; `config_entry` is only needed with several DSB accounts.
 
-## Troubleshooting
+## Troubleshooting & FAQ
+
+### The card finds nothing for my class
+
+If the plan has entries but none match the configured class, the card lists the classes present in the plan, so you can check how your school spells them (`8b`, `08b`, `08abc`, …).
+
+### The card still looks old after an update
+
+The browser loads the new card through the version in its URL. If it still looks old, reload the page once with the cache cleared.
+
+### Login works in the app but not in Home Assistant, or columns are missing
 
 Check login and parser against your school without Home Assistant (runs on Python 3.9 and newer):
 
@@ -121,9 +209,9 @@ python3 -m pip install aiohttp beautifulsoup4
 python3 scripts/dsb_check.py USER PASSWORD 08b
 ```
 
-The script prints all plans, the parsed entries including `class_list`, and saves the raw HTML as `scripts/plan_<n>.html`. If the school's columns are not recognised, that file helps adapting `parser.py` (table `_HEADER_MAP`).
+The script prints all plans and the parsed entries including `class_list`, and saves the raw HTML as `scripts/plan_<n>.html`. If your school's columns are not recognised, attach that file to an issue; it is what `parser.py` (table `_HEADER_MAP`) needs to be adapted.
 
-Debug log in Home Assistant:
+### Debug logs and diagnostics
 
 ```yaml
 logger:
@@ -131,11 +219,24 @@ logger:
     custom_components.dsb_vertretungsplan: debug
 ```
 
-**Devices & services → DSB Vertretungsplan → Download diagnostics** contains all fetched data (credentials and URLs redacted).
+**Settings** > **Devices & services** > **DSB Vertretungsplan** > **Download diagnostics** contains all fetched data, with credentials and URLs removed.
 
-## Tests
+## For developers
 
 ```bash
 pip install -r requirements-test.txt
+ruff check custom_components tests scripts
 pytest tests/
 ```
+
+See [CHANGELOG.md](CHANGELOG.md) for what changed.
+
+**Releasing:** bump `version` in `custom_components/dsb_vertretungsplan/manifest.json`, move the CHANGELOG entry to the new version, then publish a GitHub release with the tag `vX.Y.Z`.
+
+## Disclaimer
+
+This project is independent and not affiliated with, endorsed by, or supported by DSB / heinekingmedia GmbH or Untis GmbH. The names are used only to say which service the integration works with.
+
+## License
+
+[MIT](LICENSE)

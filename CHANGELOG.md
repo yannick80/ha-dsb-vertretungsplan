@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Repository: README in the same layout as the other projects (badges, Marketplace/HACS buttons, troubleshooting), issue templates, Dependabot for GitHub Actions. CI renamed to *Validate*; the tests run again (missing frontend package in the test requirements).
+- Manifest: documentation and issue tracker point to this repository, code owner set.
+
 ## 1.2.2
 
 - The card is now registered as a Lovelace dashboard resource (storage mode), the same mechanism HACS uses. The frontend loads resources before it builds cards, which fixes the intermittent "Custom element doesn't exist: dsb-vertretungsplan-card" on slow devices and in the companion apps. The entry is created and updated automatically; with YAML managed resources the previous extra-script loading is used.
