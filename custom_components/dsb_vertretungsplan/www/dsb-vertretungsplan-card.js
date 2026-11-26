@@ -12,7 +12,7 @@
 
 const CARD_TAG = "dsb-vertretungsplan-card";
 const EDITOR_TAG = "dsb-vertretungsplan-card-editor";
-const CARD_VERSION = "1.2.3";
+const CARD_VERSION = "1.2.4";
 
 const CLASS_RE = /^(\d{1,2})([a-zäöü]*)$/;
 const WEEKDAYS = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"];
