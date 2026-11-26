@@ -1,0 +1,10 @@
+name: Feature request
+description: Suggest something the integration or the card should do.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would you like it to do?
+    validations:
+      required: true
